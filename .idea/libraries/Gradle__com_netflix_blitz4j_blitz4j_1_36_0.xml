@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.netflix.blitz4j:blitz4j:1.36.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.netflix.blitz4j/blitz4j/1.36.0/e2e6fc2ae83d8462ba099d35ad438b14a33097a1/blitz4j-1.36.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.netflix.blitz4j/blitz4j/1.36.0/eff6bbbd62db2579239e82a25cdfcc7b7664a5a7/blitz4j-1.36.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
