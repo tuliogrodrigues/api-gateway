@@ -1,9 +1,28 @@
+info:
+  component: Api Gateway
+
 server:
-  port: ${vcap.application.port:8761}
+  port: 8761
 
 eureka:
+  instance: api-gateway
   client:
     registerWithEureka: false
     fetchRegistry: false
     server:
       waitTimeInMsWhenSyncEmpty: 0
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+zuul:
+  routes:
+    profile:
+      serviceId: users
+    user-api:
+      path: /users/**
+      url: http://localhost:8081/user-api
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web: DEBUG

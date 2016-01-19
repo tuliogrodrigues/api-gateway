@@ -1,15 +1,18 @@
 package com.tgr.gateway;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
+@EnableZuulProxy
 @EnableEurekaServer
-public class ProxyApplication {
+@EnableDiscoveryClient
+public class GatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProxyApplication.class, args);
+        new SpringApplicationBuilder(GatewayApplication.class).web(true).run(args);
     }
 }
