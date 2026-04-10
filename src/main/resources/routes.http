@@ -1,0 +1,7 @@
+### List all Users
+GET http://localhost:8080/users
+Accept: application/json
+
+### GET User by Id
+GET http://localhost:8080/users/1
+Accept: application/json
