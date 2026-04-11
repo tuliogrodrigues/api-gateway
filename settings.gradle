@@ -1,0 +1,5 @@
+rootProject.name = 'api-platform'
+
+include 'api-gateway'
+include 'user-service'
+include 'account-service'
