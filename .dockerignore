@@ -1,0 +1,30 @@
+# Gradle
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+
+# IDE
+.idea/
+.settings/
+.project
+.classpath
+bin/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+
+# Test files
+src/test/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Infrastructure
+infra/
