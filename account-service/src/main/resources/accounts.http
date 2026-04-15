@@ -1,0 +1,3 @@
+### List an Account by Id
+GET http://localhost:8081/accounts/1
+Accept: application/json
