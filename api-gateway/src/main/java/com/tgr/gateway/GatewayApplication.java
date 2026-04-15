@@ -24,8 +24,10 @@ public class GatewayApplication {
         return builder.routes()
                 .route("users", r ->
                     r.path("/users", "/users/**")
-                            .filters(f -> f.rewritePath("/users", "/anything/users"))
-                            .uri("http://httpbin.org"))
+                            .uri("http://user-service:8082/"))
+                .route("accounts", r ->
+                        r.path("/accounts", "/accounts/**")
+                                .uri("http://account-service:8081/"))
                 .build();
     }
  }
