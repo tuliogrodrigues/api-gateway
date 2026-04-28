@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface Models {
-    public record Account(
+    record Account(
             Long id,
             UUID ownerId,
             BigDecimal balance,

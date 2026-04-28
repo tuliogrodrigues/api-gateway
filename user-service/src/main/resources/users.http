@@ -1,3 +1,32 @@
-### List an User by Id
+### Login to get JWT token
+POST http://localhost:8082/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### List an User by Id (Authenticated)
 GET http://localhost:8082/users/1
 Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzczNzA0NjUsImV4cCI6MTc3NzM3NDA2NX0.zdzofAjrJ4oOysVtKlKDCpc2lnel-RUcZ7b-l5oo8Fg
+
+### Create a new User (Authenticated)
+POST http://localhost:8082/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzczNzA0NjUsImV4cCI6MTc3NzM3NDA2NX0.zdzofAjrJ4oOysVtKlKDCpc2lnel-RUcZ7b-l5oo8Fg
+
+{
+  "name": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "taxId": "123456789",
+  "password": "password123",
+  "role": "USER"
+}
+
+### List all Users (Authenticated)
+GET http://localhost:8082/users
+Accept: application/json
+Authorization: Bearer mock-token
