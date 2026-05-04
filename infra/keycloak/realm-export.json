@@ -1,5 +1,4 @@
 {
-  "_comment": "WARNING: The test user passwords below are placeholders for local development only. Before any non-local deployment, rotate all credentials via the Keycloak Admin Console and never use these values in staging or production.",
   "id": "api-gateway",
   "realm": "api-gateway",
   "enabled": true,
@@ -56,7 +55,6 @@
   },
   "users": [
     {
-      "_comment": "LOCAL DEV ONLY — rotate this password before any shared environment",
       "username": "admin",
       "enabled": true,
       "emailVerified": true,
@@ -69,7 +67,6 @@
       "realmRoles": ["admin"]
     },
     {
-      "_comment": "LOCAL DEV ONLY — rotate this password before any shared environment",
       "username": "testuser",
       "enabled": true,
       "emailVerified": true,
