@@ -16,7 +16,16 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService(@Value("${jwt.secret:myVerySecureSecretKeyForJWTTokenGeneration12345}") String secret) {
+    public JwtService(@Value("${JWT_SECRET}") String secret) {
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException(
+                    "JWT_SECRET environment variable is not set. " +
+                            "Generate a secure value with: openssl rand -base64 48");
+        }
+        if (secret.length() < 32) {
+            throw new IllegalStateException(
+                    "JWT_SECRET must be at least 32 characters long for HMAC-SHA256.");
+        }
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -28,7 +37,7 @@ public class JwtService {
                         "role", role
                 ))
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
+                .expiration(new Date(System.currentTimeMillis() + 3_600_000L))
                 .signWith(secretKey)
                 .compact();
     }
