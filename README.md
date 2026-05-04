@@ -25,7 +25,7 @@ This project showcases a microservices architecture built entirely on reactive S
 
 ### API Gateway
 - **Spring Cloud Gateway** - Reactive API Gateway (successor to Netflix Zuul)
-- **Rector** - Reactive HTTP client for service communication
+- **Reactor** - Reactive HTTP client for service communication
 - **Resilience4j** - Circuit breaker pattern for fault tolerance
 - **SpringDoc OpenAPI** - OpenAPI/Swagger documentation
 
@@ -41,6 +41,7 @@ This project showcases a microservices architecture built entirely on reactive S
 | Circuit Breaker | Resilience4j |
 | Service Communication | Reactor (WebClient) |
 | Documentation | OpenAPI 3.0 |
+| Build | Gradle multi-project |
 
 ## Routing
 
@@ -53,11 +54,26 @@ The gateway routes incoming requests to backend services:
 
 ## Building
 
+### Local Build
+
 ```bash
 ./gradlew build
 ```
 
+### Docker Build
+
+Each service can be built independently using its Dockerfile:
+
+```bash
+# Build all services
+docker build -t api-gateway:latest -f api-gateway/Dockerfile .
+docker build -t user-service:latest -f user-service/Dockerfile .
+docker build -t account-service:latest -f account-service/Dockerfile .
+```
+
 ## Running
+
+### Local Development
 
 Start each service:
 
@@ -72,7 +88,27 @@ java -jar user-service/build/libs/user-service-0.0.1-SNAPSHOT.jar --server.port=
 java -jar account-service/build/libs/account-service-0.0.1-SNAPSHOT.jar --server.port=8081
 ```
 
-Or use Docker Compose for orchestration.
+### Docker Compose
+
+```bash
+docker compose -f infra/compose.yml up
+```
+
+## Docker Architecture
+
+The Docker setup uses a multi-stage build with Gradle from the root project:
+
+- **Build stage**: Copies Gradle wrapper from root, includes all service directories for multi-project build
+- **Runtime stage**: Copies the built JAR artifact
+
+Each service Dockerfile:
+- Copies `gradle/`, `gradlew`, `settings.gradle`, and all service directories
+- Runs `./gradlew :service-name:bootJar` for the specific service
+
+This approach:
+- Shares Gradle wrapper across all services (single source of truth)
+- Supports independent service builds
+- Includes all services for Gradle multi-project resolution
 
 ## API Documentation
 
