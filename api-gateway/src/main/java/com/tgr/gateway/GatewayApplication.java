@@ -15,19 +15,23 @@ public class GatewayApplication {
 
     private static final Logger log = LoggerFactory.getLogger(GatewayApplication.class);
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(GatewayApplication.class, args);
     }
 
     @Bean
     RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
+                .route("keycloak-token", r ->
+                        r.path("/auth/token")
+                                .filters(f -> f.setPath("/realms/api-gateway/protocol/openid-connect/token"))
+                                .uri("http://keycloak:8080/"))
                 .route("users", r ->
-                    r.path("/users", "/users/**")
-                            .uri("http://user-service:8082/"))
+                        r.path("/users", "/users/**")
+                                .uri("http://user-service:8082/"))
                 .route("accounts", r ->
                         r.path("/accounts", "/accounts/**")
                                 .uri("http://account-service:8081/"))
                 .build();
     }
- }
+}

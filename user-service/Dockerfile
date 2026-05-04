@@ -1,13 +1,20 @@
-FROM gradle:9.4.1-jdk21 AS build
+FROM eclipse-temurin:25-jdk AS build
 
 WORKDIR /home/gradle/user
+
+# Copy gradle wrapper
+COPY gradle /home/gradle/user/gradle
+COPY gradlew /home/gradle/user/gradlew
+COPY gradle/wrapper/gradle-wrapper.properties /home/gradle/user/gradle/wrapper/gradle-wrapper.properties
+
+RUN chmod +x /home/gradle/user/gradlew
 
 COPY build.gradle /home/gradle/user/build.gradle
 COPY src /home/gradle/user/src
 
-RUN gradle clean bootJar --no-daemon
+RUN ./gradlew clean bootJar --no-daemon
 
-FROM eclipse-temurin:21-jre AS runtime
+FROM eclipse-temurin:25-jre AS runtime
 WORKDIR /app
 
 COPY --from=build /home/gradle/user/build/libs/*.jar app.jar

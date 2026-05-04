@@ -6,11 +6,16 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/api-gateway
     networks:
       - gateway-network
     depends_on:
-      - user-service
-      - account-service
+      user-service:
+        condition: service_started
+      account-service:
+        condition: service_started
+      keycloak:
+        condition: service_started
 
   user-service:
     build: ../user-service
@@ -22,12 +27,14 @@ services:
       - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:postgres@postgres:5432/postgres
       - SPRING_R2DBC_USERNAME=postgres
       - SPRING_R2DBC_PASSWORD=postgres
-      - KEYCLOAK_URL=http://keycloak:8080/realms/api-gateway
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/api-gateway
     networks:
       - gateway-network
     depends_on:
-      - postgres
-      - keycloak
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   account-service:
     build: ../account-service
@@ -36,10 +43,14 @@ services:
       - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=default
+      - KEYCLOAK_ISSUER_URI=http://keycloak:8080/realms/api-gateway
     networks:
       - gateway-network
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   postgres:
     image: postgres:16
@@ -52,20 +63,33 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - gateway-network
 
   keycloak:
     image: quay.io/keycloak/keycloak:25.0
     container_name: keycloak
-    command: start-dev
+    command: start-dev --import-realm
     ports:
       - "8180:8080"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm.json:ro
     networks:
       - gateway-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:8080/health/ready || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
 
 volumes:
   postgres_data:

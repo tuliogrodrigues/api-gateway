@@ -1,32 +1,35 @@
-### Login to get JWT token
-POST http://localhost:8082/users/login
-Content-Type: application/json
+### 1. Get JWT token from Keycloak
+# @name token
+POST http://localhost:8180/realms/api-gateway/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "email": "test@example.com",
-  "password": "password123"
-}
+grant_type=password&client_id=api-gateway-client&client_secret=api-gateway-secret&username={{username}}&password={{password}}
 
-### List an User by Id (Authenticated)
-GET http://localhost:8082/users/1
+### 2. Get User by ID (Authenticated via Gateway)
+GET http://localhost:8080/users/1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzczNzA0NjUsImV4cCI6MTc3NzM3NDA2NX0.zdzofAjrJ4oOysVtKlKDCpc2lnel-RUcZ7b-l5oo8Fg
+Authorization: Bearer {{$auth.token("gateway-config")}}
 
-### Create a new User (Authenticated)
-POST http://localhost:8082/users
+### 3. Create a new User (Authenticated via Gateway)
+POST http://localhost:8080/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidXNlcklkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NzczNzA0NjUsImV4cCI6MTc3NzM3NDA2NX0.zdzofAjrJ4oOysVtKlKDCpc2lnel-RUcZ7b-l5oo8Fg
+Authorization: Bearer {{$auth.token("gateway-config")}}
 
 {
   "name": "John",
   "lastName": "Doe",
   "email": "john.doe@example.com",
-  "taxId": "123456789",
+  "taxId": "000000001",
   "password": "password123",
   "role": "USER"
 }
 
-### List all Users (Authenticated)
-GET http://localhost:8082/users
+### 4. List all Users (Authenticated via Gateway)
+GET http://localhost:8080/users
 Accept: application/json
-Authorization: Bearer mock-token
+Authorization: Bearer {{$auth.token("gateway-config")}}
+
+### 5. Get Accounts (Authenticated via Gateway)
+GET http://localhost:8080/accounts
+Accept: application/json
+Authorization: Bearer {{$auth.token("gateway-config")}}

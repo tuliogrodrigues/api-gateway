@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.1'
+    id 'org.springframework.boot' version '4.0.0'
     id 'io.spring.dependency-management' version '1.1.7' apply true
 }
 
@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -17,36 +17,24 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.boot:spring-boot-dependencies:3.4.1'
-    }
-}
-
 dependencies {
-    // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     
-    // R2DBC + PostgreSQL
     implementation 'org.postgresql:postgresql'
     implementation 'org.postgresql:r2dbc-postgresql:1.1.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     
-    // Security - JWT/Keycloak (OAuth2 Resource Server)
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     
-    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     
-    // Record Builder
     annotationProcessor 'io.soabase.record-builder:record-builder-processor:52'
     compileOnly 'io.soabase.record-builder:record-builder-core:52'
 
-    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -54,4 +42,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+    mainClass.set('com.tgr.userservice.UserServiceApplication')
 }

@@ -1,11 +1,21 @@
-info:
-  component: Api Gateway
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://keycloak:8080/realms/api-gateway/protocol/openid-connect/certs}
 
 server:
   port: 8080
 
+user:
+  service:
+    url: http://user-service:8082
+
 logging:
   level:
     ROOT: INFO
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.web: TRACE
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
