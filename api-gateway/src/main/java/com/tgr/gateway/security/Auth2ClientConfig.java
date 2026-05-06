@@ -12,9 +12,6 @@ import java.util.regex.Pattern;
 @EnableWebFluxSecurity
 class Auth2ClientConfig {
 
-    private static final Pattern CLAIM_PATTERN = Pattern.compile("\"([^\"]+)\"\\s*:\\s*\"?([^\",\\}]+)\"?");
-    private static final String KEYCLOAK_ISSUER = "http://keycloak:8080/realms/api-gateway";
-
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         return http

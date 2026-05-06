@@ -62,7 +62,7 @@
       "lastName": "User",
       "email": "admin@example.com",
       "credentials": [
-        { "type": "password", "value": "change-me-admin", "temporary": true }
+        { "type": "password", "value": "admin", "temporary": false }
       ],
       "realmRoles": ["admin"]
     },
@@ -74,7 +74,7 @@
       "lastName": "User",
       "email": "testuser@example.com",
       "credentials": [
-        { "type": "password", "value": "change-me-testuser", "temporary": true }
+        { "type": "password", "value": "testuser", "temporary": false }
       ],
       "realmRoles": ["user"]
     }
