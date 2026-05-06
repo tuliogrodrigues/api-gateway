@@ -6,10 +6,15 @@ A reactive API Gateway implementation demonstrating Spring Cloud Gateway with Sp
 
 This project showcases a microservices architecture built entirely on reactive Spring technologies:
 
-```
+```text
                     ┌─────────────────┐
+                    │    Keycloak     │
+                    │   (Port 8180)   │
+                    └────────┬────────┘
+                             │ (OAuth2/OIDC)
+                    ┌────────▼────────┐
                     │  API Gateway    │
-                    │ (Port 8080)     │
+                    │   (Port 8080)   │
                     └────────┬────────┘
                              │
               ┌──────────────┴──────────────┐
@@ -18,7 +23,14 @@ This project showcases a microservices architecture built entirely on reactive S
      ┌────────────────┐         ┌────────────────┐
      │  User Service  │         │ Account Service│
      │  (Port 8082)   │         │  (Port 8081)   │
-     └────────────────┘         └────────────────┘
+     └────────┬───────┘         └────────┬───────┘
+              │                          │
+              └──────────────┬───────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │   PostgreSQL    │
+                    │   (Port 5432)   │
+                    └─────────────────┘
 ```
 
 ## Components
@@ -33,6 +45,10 @@ This project showcases a microservices architecture built entirely on reactive S
 - **User Service** - Spring WebFlux reactive REST API
 - **Account Service** - Spring WebFlux reactive REST API
 
+### Infrastructure
+- **Keycloak** - Identity and Access Management (OAuth2/OIDC)
+- **PostgreSQL** - Relational Database for microservices
+
 ## Key Technologies
 
 | Component | Technology |
@@ -41,6 +57,8 @@ This project showcases a microservices architecture built entirely on reactive S
 | Circuit Breaker | Resilience4j |
 | Service Communication | Reactor (WebClient) |
 | Documentation | OpenAPI 3.0 |
+| Identity Provider | Keycloak |
+| Database | PostgreSQL (R2DBC) |
 | Build | Gradle multi-project |
 
 ## Routing
@@ -81,7 +99,7 @@ Start each service:
 # API Gateway
 java -jar api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar
 
-# User Service  
+# User Service
 java -jar user-service/build/libs/user-service-0.0.1-SNAPSHOT.jar --server.port=8082
 
 # Account Service
@@ -93,6 +111,8 @@ java -jar account-service/build/libs/account-service-0.0.1-SNAPSHOT.jar --server
 ```bash
 docker compose -f infra/compose.yml up
 ```
+
+This will start all the microservices along with their required infrastructure (Keycloak and PostgreSQL). Keycloak is pre-configured with a realm and client for the API Gateway.
 
 ## Docker Architecture
 
